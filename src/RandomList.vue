@@ -1,22 +1,22 @@
 <template lang="html">
-    <section class="columns jokes-list">
+    <section class="columns jokes-list" id="randoms">
 
-        <div class="column" v-for="(joke, index) in jokes" :key="joke.id">
+        <div class="column" :key="randoms.id">
             <div class="card">
                 <div class="card-image">
                     <figure class="image">
-                        <img :src="joke.images.original.gif_url" alt="Random images placeholder">
+                        <!-- <img :src="randoms.images.original.gif_url" alt="Random images placeholder"> -->
                     </figure>
                 </div>
                 <div class="card-content">
                     <div class="content">
-                        <p class="tag is-primary">Rate: {{ joke.rating }}</p>
-                        <h3>{{ joke.title }}</h3>
+                        <p class="tag is-primary">Rate: {{ randoms.rating }}</p>
+                        <h3>{{ randoms.title }}</h3>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <a :href="joke.source" class="card-footer-item">Source</a>
-                    <a :href="joke.user" class="card-footer-item">User</a>
+                    <a :href="randoms.source" class="card-footer-item">Source</a>
+                    <a :href="randoms.user" class="card-footer-item">User</a>
                 </div>
             </div>
         </div>
@@ -26,8 +26,8 @@
 
 <script>
     export default {
-        name: 'JokesList',
-        props: ['jokes'],
+        name: 'RandomList',
+        props: ['randoms'],
         // data() {
         //     return {
         //         trendingResolved: false,

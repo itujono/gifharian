@@ -1,15 +1,10 @@
 <template>
     <div id="app">
-        <!-- <header>
-            <span>Masuk ke Dalam</span>
-        </header> -->
         <main>
-
 
             <section class="hero is-success is-fullheight">
                 <div class="hero-body">
                     <div class="container">
-
 
                         <div class="page-title">
                             <img src="./assets/sun.png" alt="Logo" width="50">
@@ -17,51 +12,45 @@
                             <h4 class="subtitle">disajikan tiap hari &mdash; kapanpun kamu mau</h4>
                         </div>
 
-                        <div class="columns is-centered">
-
-                            <div class="column is-two-thirds">
-
-                                <div class="level page-intro">
-                                    <div class="level-item">
-                                        <div>
-                                            <label>Lihat GIF yang Lagi Trending</label>
-                                            <button id="btn" class="button is-primary" @click="getJokes">Lihat</button>
+                        <div class="columns page-intro">
+                            <div class="column">
+                                <div>
+                                    <label>Lihat GIF yang Lagi Trending</label>
+                                    <button id="btn-trending" class="button is-primary" @click="getJokes">Lihat</button>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div>
+                                    <label>Lihat GIF Random Aja</label>
+                                    <button id="btn-random" class="button is-primary" @click="getRandom">Lihat</button>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <form class="form" @submit.prevent="onSubmit">
+                                    <div class="field has-addons">
+                                        <div class="control is-expanded">
+                                            <input class="input" v-model="newSearch" type="text" placeholder="Cari apa aja deh...">
+                                        </div>
+                                        <div class="control">
+                                            <input type="submit" value="Cari" class="button is-primary">
                                         </div>
                                     </div>
-                                    <div class="level-item">
-                                        atau...
+                                    <p class="help is-danger" v-if="searchErrorMessage">
+                                        Isi dulu kelesss
+                                    </p>
+                                    <div class="search-resolved" v-if="searchResolved">
+                                        Eh ada ketemu {{ jokes.length }} GIF nih buat kata kunci {{ lastSearch }}.
                                     </div>
-                                    <div class="level-item">
-                                        <form class="form" @submit.prevent="onSubmit">
-                                            <div class="field has-addons">
-                                                <div class="control">
-                                                    <input class="input" v-model="newSearch" type="text" placeholder="Cari apa aja deh...">
-                                                </div>
-                                                <div class="control">
-                                                    <input type="submit" value="Cari" class="button is-primary">
-                                                </div>
-                                            </div>
-                                            <div class="help is-danger" v-if="searchErrorMessage">
-                                                Isi dulu kelesss
-                                            </div>
-                                            <div class="search-resolved" v-if="searchResolved">
-                                                Eh ada ketemu {{ jokes.length }} GIF nih buat kata kunci {{ lastSearch }}.
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                </div>
-
-                            </div> <!-- kelar Column is-Half -->
-
+                                </form>
+                            </div>
                         </div>
-
 
                         <div v-if="loading" class="loading-state">
                             <img src="../src/assets/loader.gif"/>
                         </div>
 
                         <jokes-list :jokes="jokes"></jokes-list>
+                        <!-- <random-list :randoms="randoms"></random-list> -->
 
                     </div>
                 </div>
@@ -74,6 +63,7 @@
 <script>
     import axios from 'axios';
     import JokesList from './JokesList.vue';
+    import RandomList from './RandomList.vue';
 
     const GphApiClient = require('giphy-js-sdk-core');
     const client = GphApiClient("OXqpSPdihtQBjAjBIzWWEavgT2W0fJ62");
@@ -81,11 +71,15 @@
     export default {
         name: 'app',
         components: {
-            'jokes-list': JokesList
+            JokesList,
+            RandomList
         },
         data () {
             return {
                 jokes: [],
+                randoms: [],
+                jokesView: false,
+                randomView: false,
                 loading: false,
                 newSearch: '',
                 lastSearch: '',
@@ -98,12 +92,20 @@
             getJokes: function() {
                 this.loading = true;
                 client.trending('gifs', {}).then(response =>  {
-                    this.loading = false;
-                    this.jokes = response.data;
-                    console.log(response);
-                }).catch(error =>  {
-                    console.log(error);
-                    this.loading = false;
+                    this.loading = false
+                    this.jokes = response.data
+                }).catch(error => {
+                    this.loading = false
+                })
+            },
+            getRandom: function() {
+                this.loading = true;
+                client.random('gifs', {}).then(response =>  {
+                    this.loading = false
+                    this.randoms = response.data
+                    console.log(response)
+                }).catch(error => {
+                    this.loading = false
                 })
             },
             onSubmit: function() {
@@ -131,6 +133,7 @@
     body {
         margin: 0;
         background-color: #23d160 !important;
+        line-height: 1.5
     }
 
     #app {
@@ -175,7 +178,7 @@
 
     .hero {
         .form {
-            // margin-bottom: 3em;
+            margin-top: 2em;
         }
     }
 
@@ -208,15 +211,10 @@
         margin-top: 70px;
     }
 
-    // .columns {
-    //     .column {
-    //         flex-basis: 23%;
-    //     }
-    // }
-
-    .page-intro {
+    .columns.page-intro {
         margin-bottom: 3em;
-        .level-item {
+        padding: 0 3em;
+        .column{
             > div {
                 display: flex;
                 flex-direction: column;
