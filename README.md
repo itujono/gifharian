@@ -1,4 +1,4 @@
-# vue-axios
+# GIF Harian
 
 > Web-app yang dibangun buat nyari GIF aja. Supaya nggak gimana kali harimu itu.
 
