@@ -215,6 +215,7 @@
     // }
 
     .page-intro {
+        margin-bottom: 3em;
         .level-item {
             > div {
                 display: flex;
