@@ -50,6 +50,7 @@
                         </div>
 
                         <jokes-list :jokes="jokes"></jokes-list>
+
                         <!-- <random-list :randoms="randoms"></random-list> -->
 
                     </div>
@@ -78,8 +79,6 @@
             return {
                 jokes: [],
                 randoms: [],
-                jokesView: false,
-                randomView: false,
                 loading: false,
                 newSearch: '',
                 lastSearch: '',
@@ -123,9 +122,6 @@
                 }
             }
         }
-        // mounted: function() {
-        //     this.getJokes();
-        // }
     }
 </script>
 

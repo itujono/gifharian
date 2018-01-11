@@ -1,5 +1,6 @@
 <template lang="html">
-    <section class="columns jokes-list">
+
+    <transition-group tag="section" name="company" class="columns jokes-list" mode="out-in">
 
         <div class="column" v-for="(joke, index) in jokes" :key="joke.id">
             <div class="card">
@@ -15,16 +16,18 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <a :href="joke.source" class="card-footer-item">Source</a>
+                    <a :href="joke.source" class="card-footer-item" target="_blank">Source</a>
                     <a :href="joke.user" class="card-footer-item">User</a>
                 </div>
             </div>
         </div>
 
-    </section>
+    </transition-group>
+
 </template>
 
 <script>
+
     export default {
         name: 'JokesList',
         props: ['jokes'],
@@ -76,5 +79,41 @@
                 margin-top: 5px;
             }
         }
+    }
+
+    /* base */
+    .company {
+        backface-visibility: hidden;
+        z-index: 1;
+    }
+
+    /* moving */
+    .company-move {
+        transition: all .3s ease-in-out 50ms;
+    }
+
+    /* appearing */
+    .company-enter-active {
+        transition: all .2s linear;
+    }
+
+    .company-enter-to {
+        opacity: 1;
+        transform: initial;
+        transition: all .2s linear;
+    }
+
+    /* disappearing */
+    .company-leave-active {
+        transition: all .1s ease-in;
+        position: absolute;
+        z-index: 0;
+    }
+
+    /* appear at / disappear to */
+    .company-enter,
+    .company-leave-to {
+        opacity: 0;
+        transform: translateY(25px);
     }
 </style>
